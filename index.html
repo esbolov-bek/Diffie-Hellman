@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diffie-Hellman: Kalitlarni kiritish</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    input {
+      padding: 5px;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+    button {
+      padding: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Diffie-Hellman misoli</h1>
+    <label for="prime">Asosiy raqamni kiriting (p):</label>
+    <input type="number" id="prime" min="1" required>
+    <label for="generator">Ildizni kiriting (g):</label>
+    <input type="number" id="generator" min="1" required>
+    <label for="privateA">A (a) uchun maxfiy kalitni kiriting:</label>
+    <input type="number" id="privateA" min="1" required>
+    <label for="privateB">B (b) uchun maxfiy kalitni kiriting:</label>
+    <input type="number" id="privateB" min="1" required>
+    <button onclick="generateKeys()">Kalitlarni yaratish</button>
+    <p>Ochiq kalitlar:</p>
+    <p>A tomoni: <span id="aPubKey"></span></p>
+    <p>B tomoni: <span id="bPubKey"></span></p>
+    <p>Umumiy maxfiy kalit: </p>
+    <p><span id="sharedSecret"></span></p>
+  </div>
+
+  <script>
+    function generateKeys() {
+      // Получаем значения из полей ввода
+      const p = parseInt(document.getElementById('prime').value);
+      const g = parseInt(document.getElementById('generator').value);
+      const a = parseInt(document.getElementById('privateA').value);
+      const b = parseInt(document.getElementById('privateB').value);
+
+      // Генерация открытых ключей для сторон A и B
+      const A_pub = (g ** a) % p;
+      const B_pub = (g ** b) % p;
+
+      // Вычисление общего секретного ключа для сторон A и B
+      const sharedSecretA = (B_pub ** a) % p;
+      const sharedSecretB = (A_pub ** b) % p;
+
+      // Вывод результатов на страницу
+      document.getElementById('aPubKey').innerText = A_pub;
+      document.getElementById('bPubKey').innerText = B_pub;
+      document.getElementById('sharedSecret').innerText = sharedSecretA === sharedSecretB
+        ? sharedSecretA
+        : "Ошибка: Общие секретные ключи не совпадают.";
+    }
+  </script>
+</body>
+</html>
